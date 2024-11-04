@@ -1,9 +1,8 @@
 import pandas as pd
 from transformers import AutoTokenizer, AutoModelForCausalLM, TrainingArguments, Trainer
 import torch
-import ast
-import os
 from torch.utils.data import Dataset as TorchDataset
+import os
 
 class ProductDescriptionDataset(TorchDataset):
     def __init__(self, texts, tokenizer, max_length=512):
@@ -46,10 +45,7 @@ class ProductDescriptionGenerator:
         training_texts = []
         
         for _, row in df.iterrows():
-            try:
-                metadata = ast.literal_eval(row['metadata'])
-            except:
-                metadata = row['metadata']
+            metadata = row['metadata']  # Access directly as dictionary
             
             # Create the combined text
             text = f"""Input:
@@ -108,12 +104,7 @@ END"""
 
     def generate_description(self, product_info, max_length=200):
         metadata = product_info['metadata']
-        if isinstance(metadata, str):
-            try:
-                metadata = ast.literal_eval(metadata)
-            except:
-                pass
-
+        
         input_text = f"""Input:
 Product: {product_info['name']}
 Category: {product_info['category']}
@@ -136,11 +127,7 @@ Output:"""
             )
         
         generated_text = self.tokenizer.decode(outputs[0], skip_special_tokens=True)
-        # Extract only the generated description part
-        try:
-            return generated_text.split("Output:")[-1].strip()
-        except:
-            return generated_text
+        return generated_text.split("Output:")[-1].strip()
 
     def save_model(self, path):
         self.model.save_pretrained(path)

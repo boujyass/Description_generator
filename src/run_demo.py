@@ -9,7 +9,7 @@ def main():
         print(f"CUDA available: {torch.cuda.is_available()}")
         
         print("\nGenerating sample automotive product data...")
-        df = generate_sample_data(20)  # Generate 20 sample products
+        df = generate_sample_data(1000)  # Generate 20 sample products
         
         print("\nSample of generated data:")
         print(df[['name', 'category', 'price']].head())

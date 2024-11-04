@@ -1,5 +1,6 @@
 import pandas as pd
 import random
+import os
 
 def generate_sample_data(num_samples=100):
     # Product categories and their attributes
@@ -50,7 +51,7 @@ def generate_sample_data(num_samples=100):
             'product_id': f'P{random.randint(1000, 9999)}',
             'name': f'{spec} {material} {product}',
             'category': category,
-            'metadata': str(metadata),
+            'metadata': metadata,  # keep as dictionary for easier handling
             'original_description': original_desc,
             'price': round(random.uniform(20.0, 500.0), 2),
             'stock': random.randint(0, 100)
